@@ -21,11 +21,16 @@ public class Interface1 implements ActionListener{
     JTable table1 = new JTable();
     JScrollPane scroll;
     JPanel painelGrid = new JPanel();
+    JPanel painelGridEditar = new JPanel();
     JLabel labelMes = new JLabel("Mês");
-    JTextField campoCliente = new JTextField();
-    JTextField campoServico = new JTextField();
-    JTextField campoValor = new JTextField();
-    JTextField campoData = new JTextField();
+    JLabel labelCliente = new JLabel("Nome Cliente:  ");
+    JLabel labelServico = new JLabel("Serviço:  ");
+    JLabel labelValor = new JLabel("Valor:  ");
+    JLabel labelInserir = new JLabel("Inserir Cliente:");
+    JTextField campoInserirCliente = new JTextField();
+    JTextField campoInserirServico = new JTextField();
+    JTextField campoInserirValor = new JTextField();
+    JTextField campoInserirData = new JTextField();
 
     DefaultTableModel model = new DefaultTableModel();
     JButton botaoVer = new JButton("Visualizar");
@@ -35,12 +40,23 @@ public class Interface1 implements ActionListener{
     JButton botaoEditar2 = new JButton("Editar");
 
 
-    public void gridLayoutMethod(){
+    public void gridLayoutMethod1(){
         painelGrid.setLayout(new GridLayout(1,3));
         painelGrid.add(botaoAdicionar);
         painelGrid.add(botaoRemover);
         painelGrid.add(botaoEditar2);        
 
+    }
+    public void gridLayoutMethod2(){
+        painelGridEditar.setLayout(new GridLayout(3, 2));
+        painelGridEditar.add(labelCliente);
+        painelGridEditar.add(campoInserirCliente);
+        painelGridEditar.add(labelServico);
+        painelGridEditar.add(campoInserirServico);
+        painelGridEditar.add(labelValor);
+        painelGridEditar.add(campoInserirValor);
+
+        
     }
     public void endFrameMethod(){
         frame1.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -76,17 +92,24 @@ public class Interface1 implements ActionListener{
     
     public void componentsMethod(){
         painelGrid.setBounds(600,20,300,40);
+        painelGridEditar.setBounds(350,350,600,120);
 
         scroll.setBounds(530,80,800,500);
         labelMes.setBounds(530,30,800,30);
         labelMes.setFont(new Font("Comic Sans", Font.BOLD, 24));   
         labelMes.setHorizontalAlignment(JLabel.CENTER);
-        campoCliente.setBounds(500,300,300,40);
-        campoCliente.setFont(new Font("Comic Sans", Font.BOLD, 16));
-        campoServico.setBounds(500,360,300,40);
-        campoServico.setFont(new Font("Comic Sans", Font.BOLD, 16));
-        campoValor.setBounds(500,420,300,40);
-        campoValor.setFont(new Font("Comic Sans", Font.BOLD, 16));
+        labelCliente.setHorizontalAlignment(JLabel.RIGHT);
+        labelCliente.setFont(new Font("Comic Sans", Font.BOLD, 18));
+        labelServico.setHorizontalAlignment(JLabel.RIGHT);
+        labelServico.setFont(new Font("Comic Sans", Font.BOLD, 18));
+        labelValor.setHorizontalAlignment(JLabel.RIGHT);
+        labelValor.setFont(new Font("Comic Sans", Font.BOLD, 18));
+        labelInserir.setBounds(420 ,300, 600,30);
+        labelInserir.setFont(new Font("Comic Sans", Font.BOLD, 18));
+        labelInserir.setHorizontalAlignment(JLabel.CENTER);
+        campoInserirCliente.setFont(new Font("Comic Sans", Font.BOLD, 16));
+        campoInserirServico.setFont(new Font("Comic Sans", Font.BOLD, 16));
+        campoInserirValor.setFont(new Font("Comic Sans", Font.BOLD, 16));
         botaoVer.setBounds(0,0,300,50);
         botaoVer.setFont(new Font("Comic Sans", Font.BOLD, 24));
         botaoVer.addActionListener(this);
@@ -94,7 +117,9 @@ public class Interface1 implements ActionListener{
         botaoEditar.setFont(new Font("Comic Sans", Font.BOLD, 24));
         botaoEditar.addActionListener(this);
         botaoAdicionar.setFont(new Font("Comic Sans", Font.BOLD, 35));
+        botaoAdicionar.addActionListener(this);
         botaoRemover.setFont(new Font("Comic Sans", Font.BOLD, 50));
+        botaoRemover.addActionListener(this);
         botaoEditar2.setFont(new Font("Comic Sans", Font.BOLD, 20));
 
 
@@ -102,27 +127,29 @@ public class Interface1 implements ActionListener{
     }
     public void positionMethod(){
         frame1.add(painelGrid);
+        frame1.add(painelGridEditar);
         frame1.add(scroll);
         frame1.add(labelMes);
         frame1.add(labelMes);
         frame1.add(botaoVer);
         frame1.add(botaoEditar);
-        frame1.add(campoCliente);
-        frame1.add(campoServico);
-        frame1.add(campoValor);
-        frame1.add(campoData);
+        frame1.add(labelInserir);
+        
 
     }
     public void setarDefaultFalse(){
         scroll.setVisible(false);
         labelMes.setVisible(false);
         painelGrid.setVisible(false);
+        painelGridEditar.setVisible(false);
+        labelInserir.setVisible(false);
     }
 
     public Interface1(){
         frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        gridLayoutMethod();
+        gridLayoutMethod1();
+        gridLayoutMethod2();
         tableMethod();
         componentsMethod();
         positionMethod();
@@ -133,17 +160,28 @@ public class Interface1 implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == botaoVer){
+            painelGrid.setVisible(false);
+            painelGridEditar.setVisible(false);
+            labelInserir.setVisible(false);
+
             scroll.setVisible(true);
             labelMes.setVisible(true);
-
-            painelGrid.setVisible(false);
 
         }
         if(e.getSource() == botaoEditar){
             scroll.setVisible(false);
             labelMes.setVisible(false);
-
+            painelGridEditar.setVisible(false);
+            labelInserir.setVisible(false);
+            
             painelGrid.setVisible(true);
+
+
+        }
+        if(e.getSource() == botaoAdicionar){
+            painelGrid.setVisible(true);
+            painelGridEditar.setVisible(true);
+            labelInserir.setVisible(true);
         }
     }
 }
