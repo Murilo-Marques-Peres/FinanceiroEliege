@@ -81,7 +81,7 @@ public class Interface1 implements ActionListener{
         try {
             ServicoDAO DAO = new ServicoDAO();
             ArrayList<ServicoDTO> lista = DAO.pesquisarClientes();
-            if(confirmacaoRepeticao = true){
+            if(confirmacaoRepeticao){
                 for(int y=0; y<referenciaListaAnterior;y++){
                     model.removeRow(0);
                 }
