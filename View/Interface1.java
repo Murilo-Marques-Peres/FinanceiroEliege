@@ -27,6 +27,9 @@ import DAO.ServicoDAO;
 import DTO.ServicoDTO;
 
 public class Interface1 implements ActionListener{
+    SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
+
+
     JFrame frame1 = new JFrame();
     JTable table1 = new JTable();
     String[] opcoesCaixaDevendo = {"Sim", "Não"};
@@ -64,22 +67,38 @@ public class Interface1 implements ActionListener{
     boolean confirmacaoRepeticao = false;
     int referenciaListaAnterior;
 
+    public String funcaoFormatarData(Date data){
+        String dataString1 = data.toString();
+        String dataStringAno = dataString1.substring(0,4);
+        String dataStringMes = dataString1.substring(5,7);
+        String dataStringDia = dataString1.substring(8,10);
+
+        String dataReformatada = dataStringDia.concat("-").concat(dataStringMes).concat("-").concat(dataStringAno);
+
+        return dataReformatada;
+    } 
     public void setarLista(){
         try {
             ServicoDAO DAO = new ServicoDAO();
             ArrayList<ServicoDTO> lista = DAO.pesquisarClientes();
             if(confirmacaoRepeticao = true){
                 for(int y=0; y<referenciaListaAnterior;y++){
-                    model.removeRow(1);
+                    model.removeRow(0);
                 }
             }
+            
+
+            
             for(int x=0; x<lista.size(); x++){
                 model.addRow(new Object[]{
                     lista.get(x).getId(),
                     lista.get(x).getCliente(),
                     lista.get(x).getNomeServico(),
                     lista.get(x).getValor(),
-                    lista.get(x).getDataServico(),
+
+                    funcaoFormatarData(lista.get(x).getDataServico()),
+                    
+
                     lista.get(x).getDevendo(),
                 });
             }
@@ -326,6 +345,7 @@ public class Interface1 implements ActionListener{
             ServicoDAO DAO = new ServicoDAO();
 
             DAO.addClienteDB(servicoDTO);
+            
 
         }
     }

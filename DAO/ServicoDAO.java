@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -12,6 +14,7 @@ import javax.swing.JOptionPane;
 import DTO.ServicoDTO;
 
 public class ServicoDAO {
+    Date dataFormatada;
     Connection conn;
     PreparedStatement pstm;
     ResultSet rs;
@@ -31,6 +34,7 @@ public class ServicoDAO {
             pstm.setString(5, servicoDTO.getDevendo());
             pstm.execute();
             pstm.close();
+            JOptionPane.showMessageDialog(null, "Cliente Adicionado!");
             
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, "ServicoDAO:" + erro);
@@ -51,6 +55,17 @@ public class ServicoDAO {
                 servicoDTO.setValor(rs.getDouble("valor"));
                 servicoDTO.setDevendo(rs.getString("devendo"));
                 servicoDTO.setDataServico(rs.getDate("dataservico"));
+                
+
+                //String dataString = (rs.getDate("dataservico")).toString();
+                //SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
+                //try {
+               // dataFormatada = formato.parse(dataString);
+                
+               // } catch (ParseException e1) {
+               // e1.printStackTrace();
+           //   }
+            
                 lista.add(servicoDTO);
 
                 
