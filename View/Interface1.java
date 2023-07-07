@@ -5,11 +5,16 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -17,6 +22,9 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+
+import DAO.ServicoDAO;
+import DTO.ServicoDTO;
 
 public class Interface1 implements ActionListener{
     JFrame frame1 = new JFrame();
@@ -42,6 +50,8 @@ public class Interface1 implements ActionListener{
     JTextField campoDataMes = new JTextField();
     JTextField campoDataAno = new JTextField();
 
+    Date dataFormatada;
+
 
     DefaultTableModel model = new DefaultTableModel();
     JButton botaoVer = new JButton("Visualizar");
@@ -50,6 +60,36 @@ public class Interface1 implements ActionListener{
     JButton botaoRemover = new JButton("-");
     JButton botaoEditar2 = new JButton("Editar");
     JButton botaoAdicionarCliente = new JButton("ADD");
+
+    boolean confirmacaoRepeticao = false;
+    int referenciaListaAnterior;
+
+    public void setarLista(){
+        try {
+            ServicoDAO DAO = new ServicoDAO();
+            ArrayList<ServicoDTO> lista = DAO.pesquisarClientes();
+            if(confirmacaoRepeticao = true){
+                for(int y=0; y<referenciaListaAnterior;y++){
+                    model.removeRow(1);
+                }
+            }
+            for(int x=0; x<lista.size(); x++){
+                model.addRow(new Object[]{
+                    lista.get(x).getId(),
+                    lista.get(x).getCliente(),
+                    lista.get(x).getNomeServico(),
+                    lista.get(x).getValor(),
+                    lista.get(x).getDataServico(),
+                    lista.get(x).getDevendo(),
+                });
+            }
+            confirmacaoRepeticao = true;
+            referenciaListaAnterior = lista.size();
+
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(null,"Listar valores: " + erro);
+        }
+    }
 
 
     public void gridLayoutMethod1(){
@@ -226,6 +266,8 @@ public class Interface1 implements ActionListener{
             scroll.setVisible(true);
             labelMes.setVisible(true);
 
+            setarLista();
+
         }
         if(e.getSource() == botaoEditar){
             scroll.setVisible(false);
@@ -255,7 +297,36 @@ public class Interface1 implements ActionListener{
             
         }
         if(e.getSource() == botaoAdicionarCliente){
-            
+            String cliente1 = campoInserirCliente.getText();
+            String servico1 = campoInserirServico.getText();
+            String valor1 = campoInserirValor.getText();
+            String devendo = caixaDevendo.getSelectedItem().toString();
+
+            Double valorDouble = Double.valueOf(valor1);
+
+            String dataDia = campoDataDia.getText();
+            String dataMes = campoDataMes.getText();
+            String dataAno = campoDataAno.getText();
+            String dataCompleta = dataAno.concat("-").concat(dataMes).concat("-").concat(dataDia);
+            SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                dataFormatada = formato.parse(dataCompleta);
+                
+            } catch (ParseException e1) {
+                e1.printStackTrace();
+            }
+
+            ServicoDTO servicoDTO = new ServicoDTO();
+            servicoDTO.setCliente(cliente1);
+            servicoDTO.setNomeServico(servico1);
+            servicoDTO.setValor(valorDouble);
+            servicoDTO.setDevendo(devendo);
+            servicoDTO.setDataServico(dataFormatada);
+
+            ServicoDAO DAO = new ServicoDAO();
+
+            DAO.addClienteDB(servicoDTO);
+
         }
     }
 }
