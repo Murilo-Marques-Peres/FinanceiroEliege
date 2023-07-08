@@ -70,6 +70,7 @@ public class Interface1 implements ActionListener{
     JButton botaoEditar2 = new JButton("Editar");
     JButton botaoAdicionarCliente = new JButton("ADD");
     JButton botaoRemoverId = new JButton("Remover");
+    JButton botaoFinanceiro = new JButton("Ver Contabilidade");
 
     boolean confirmacaoRepeticao = false;
     boolean confirmacaoRepeticao2 = false;
@@ -293,6 +294,9 @@ public class Interface1 implements ActionListener{
         botaoAdicionarCliente.setBounds(600, 560, 200, 35);
         botaoAdicionarCliente.setFont(new Font("Comic Sans", Font.BOLD, 18));
         botaoAdicionarCliente.addActionListener(this);
+        botaoFinanceiro.setBounds(0,110,300,50);
+        botaoFinanceiro.setFont(new Font("Comic Sans", Font.BOLD, 24));
+        botaoFinanceiro.addActionListener(this);
         caixaMeses.setBounds(45,250,200,40);
         caixaMeses.addActionListener(this);
         labelFiltro.setFont(new Font("Comic Sans", Font.BOLD, 22));
@@ -321,6 +325,7 @@ public class Interface1 implements ActionListener{
         frame1.add(areaTextoRemover);
         frame1.add(caixaMeses);
         frame1.add(labelFiltro);
+        frame1.add(botaoFinanceiro);
     }
     public void setarDefaultFalse(){
         scroll.setVisible(false);
@@ -507,6 +512,8 @@ public class Interface1 implements ActionListener{
         if(e.getSource() == caixaMeses){
             mudarMes();
         }
+        if(e.getSource() == botaoFinanceiro){
+        
+        }  
     }
-    
 }
