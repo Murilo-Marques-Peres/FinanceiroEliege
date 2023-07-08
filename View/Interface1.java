@@ -74,6 +74,7 @@ public class Interface1 implements ActionListener{
     boolean confirmacaoRepeticao = false;
     boolean confirmacaoRepeticao2 = false;
     boolean primeiraVez = true;
+    boolean confirmacaoBotaoVer = false;
     int numeroListaFiltrado = 0;
 
     int referenciaListaAnterior;
@@ -358,27 +359,50 @@ public class Interface1 implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == botaoVer){
-            painelGrid.setVisible(false);
-            painelGridEditar.setVisible(false);
-            labelInserir.setVisible(false);
-            painelfundo1.setVisible(false);
-            painelLabel.setVisible(false);
-            labelData.setVisible(false);
-            campoDataDia.setVisible(false);
-            campoDataMes.setVisible(false);
-            campoDataAno.setVisible(false);
-            botaoAdicionarCliente.setVisible(false);
-            campoRemoverId.setVisible(false);
-            labelId.setVisible(false);
-            areaTextoRemover.setVisible(false);
+            if(!confirmacaoBotaoVer){
+                painelGrid.setVisible(false);
+                painelGridEditar.setVisible(false);
+                labelInserir.setVisible(false);
+                painelfundo1.setVisible(false);
+                painelLabel.setVisible(false);
+                labelData.setVisible(false);
+                campoDataDia.setVisible(false);
+                campoDataMes.setVisible(false);
+                campoDataAno.setVisible(false);
+                botaoAdicionarCliente.setVisible(false);
+                campoRemoverId.setVisible(false);
+                labelId.setVisible(false);
+                areaTextoRemover.setVisible(false);
+                
+                scroll.setVisible(true);
+                labelMes.setVisible(true);
+                caixaMeses.setVisible(true);
+                labelFiltro.setVisible(true);
+    
+                setarLista();
+                
+                confirmacaoBotaoVer = true;
+            }
+            if(confirmacaoBotaoVer){
+                painelGrid.setVisible(false);
+                painelGridEditar.setVisible(false);
+                labelInserir.setVisible(false);
+                painelfundo1.setVisible(false);
+                painelLabel.setVisible(false);
+                labelData.setVisible(false);
+                campoDataDia.setVisible(false);
+                campoDataMes.setVisible(false);
+                campoDataAno.setVisible(false);
+                botaoAdicionarCliente.setVisible(false);
+                campoRemoverId.setVisible(false);
+                labelId.setVisible(false);
+                areaTextoRemover.setVisible(false);
 
-            scroll.setVisible(true);
-            labelMes.setVisible(true);
-            caixaMeses.setVisible(true);
-            labelFiltro.setVisible(true);
-
-            setarLista();
-
+                scroll.setVisible(true);
+                labelMes.setVisible(true);
+                caixaMeses.setVisible(true);
+                labelFiltro.setVisible(true);
+            }
         }
         if(e.getSource() == botaoEditar){
             scroll.setVisible(false);
