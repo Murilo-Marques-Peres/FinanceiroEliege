@@ -32,8 +32,12 @@ public class Interface1 implements ActionListener{
     
     JFrame frame1 = new JFrame();
     JTable table1 = new JTable();
+    ArrayList<ServicoDTO> lista;
     String[] opcoesCaixaDevendo = {"Sim", "Não"};
     JComboBox caixaDevendo = new JComboBox<String>(opcoesCaixaDevendo);
+    String[] meses = {"Janeiro", "Fevereiro", "Março", "Abril", "Maio","Junho", "Julho", "Agosto",
+    "Setembro","Outubro", "Novembro", "Dezembro"};
+    JComboBox<String> caixaMeses = new JComboBox<String>(meses);
     JScrollPane scroll;
     JPanel painelGrid = new JPanel();
     JPanel painelGridEditar = new JPanel();
@@ -47,6 +51,7 @@ public class Interface1 implements ActionListener{
     JLabel labelInserirDevendo = new JLabel("Devendo:  ");
     JLabel labelData = new JLabel("Data: ");
     JLabel labelId = new JLabel("ID");
+    JLabel labelFiltro = new JLabel("Filtro:");
     JTextArea areaTextoRemover = new JTextArea("Para Remover um Serviço \n   Insira o ID do Serviço");
     JTextField campoInserirCliente = new JTextField();
     JTextField campoInserirServico = new JTextField();
@@ -55,7 +60,6 @@ public class Interface1 implements ActionListener{
     JTextField campoDataMes = new JTextField();
     JTextField campoDataAno = new JTextField();
     JTextField campoRemoverId = new JTextField();
-
     
     
     DefaultTableModel model = new DefaultTableModel();
@@ -68,9 +72,67 @@ public class Interface1 implements ActionListener{
     JButton botaoRemoverId = new JButton("Remover");
 
     boolean confirmacaoRepeticao = false;
+    boolean confirmacaoRepeticao2 = false;
+    boolean primeiraVez = true;
+    int numeroListaFiltrado = 0;
+
     int referenciaListaAnterior;
+    int referenciaListaAnterior2;
     Date dataFormatada;
     SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
+
+
+
+    public void mudarMes(){
+        try {
+            if(lista.size()>1 && primeiraVez){
+                int numeroListaFiltrado = lista.size();
+                for(int x3=0;x3<numeroListaFiltrado;x3++){
+                    model.removeRow(0);
+                }
+                primeiraVez = false;
+            }
+            numeroListaFiltrado = 0;
+            ServicoDAO DAO = new ServicoDAO();
+            ArrayList<ServicoDTO> lista2 = DAO.pesquisarClientes();
+            if(confirmacaoRepeticao2){
+                for(int y=0; y<referenciaListaAnterior2;y++){
+                    model.removeRow(0);
+                }
+            }
+            for(int x=0; x<lista2.size(); x++){
+                String dataString = (funcaoFormatarData(lista2.get(x).getDataServico())).toString();
+                String substringDataMes = dataString.substring(3,5);
+                int numeroCaixa = caixaMeses.getSelectedIndex() + 1;
+                String stringCaixa = String.valueOf(numeroCaixa);
+                if(substringDataMes.substring(0,1).equals("0")){
+                    substringDataMes = substringDataMes.substring(1, 2);
+                }
+                System.out.println("Substring = " + substringDataMes + " numeroCaixa = " + numeroCaixa);
+                if(substringDataMes.equals(stringCaixa)){
+                    numeroListaFiltrado++;
+                    model.addRow(new Object[]{
+                        lista2.get(x).getId(),
+                        lista2.get(x).getCliente(),
+                        lista2.get(x).getNomeServico(),
+                        lista2.get(x).getValor(),
+    
+                        funcaoFormatarData(lista2.get(x).getDataServico()),
+                        
+    
+                        lista2.get(x).getDevendo(),
+                        
+                    });
+                }
+                confirmacaoRepeticao2 = true;
+                referenciaListaAnterior2 = numeroListaFiltrado;
+                    
+                }
+
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(null,"Listar valores: " + erro);
+        }
+    }
 
     public String funcaoFormatarData(Date data){
         String dataString1 = data.toString();
@@ -85,15 +147,12 @@ public class Interface1 implements ActionListener{
     public void setarLista(){
         try {
             ServicoDAO DAO = new ServicoDAO();
-            ArrayList<ServicoDTO> lista = DAO.pesquisarClientes();
+            lista = DAO.pesquisarClientes();
             if(confirmacaoRepeticao){
                 for(int y=0; y<referenciaListaAnterior;y++){
                     model.removeRow(0);
                 }
             }
-            
-
-            
             for(int x=0; x<lista.size(); x++){
                 model.addRow(new Object[]{
                     lista.get(x).getId(),
@@ -233,7 +292,11 @@ public class Interface1 implements ActionListener{
         botaoAdicionarCliente.setBounds(600, 560, 200, 35);
         botaoAdicionarCliente.setFont(new Font("Comic Sans", Font.BOLD, 18));
         botaoAdicionarCliente.addActionListener(this);
-
+        caixaMeses.setBounds(45,250,200,40);
+        caixaMeses.addActionListener(this);
+        labelFiltro.setFont(new Font("Comic Sans", Font.BOLD, 22));
+        labelFiltro.setHorizontalAlignment(JLabel.CENTER);
+        labelFiltro.setBounds(45,200,200,30);
     }
     public void positionMethod(){
         frame1.add(painelGrid);
@@ -255,7 +318,8 @@ public class Interface1 implements ActionListener{
         frame1.add(botaoRemoverId);
         frame1.add(labelInserir);
         frame1.add(areaTextoRemover);
-        
+        frame1.add(caixaMeses);
+        frame1.add(labelFiltro);
     }
     public void setarDefaultFalse(){
         scroll.setVisible(false);
@@ -274,6 +338,8 @@ public class Interface1 implements ActionListener{
         campoRemoverId.setVisible(false);
         labelId.setVisible(false);
         areaTextoRemover.setVisible(false);
+        caixaMeses.setVisible(false);
+        labelFiltro.setVisible(false);
     }
 
     public Interface1(){
@@ -308,6 +374,8 @@ public class Interface1 implements ActionListener{
 
             scroll.setVisible(true);
             labelMes.setVisible(true);
+            caixaMeses.setVisible(true);
+            labelFiltro.setVisible(true);
 
             setarLista();
 
@@ -412,5 +480,9 @@ public class Interface1 implements ActionListener{
             ServicoDAO dao = new ServicoDAO();
             dao.removerServico(servicoDTO);
         }
+        if(e.getSource() == caixaMeses){
+            mudarMes();
+        }
     }
+    
 }

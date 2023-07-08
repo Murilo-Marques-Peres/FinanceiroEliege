@@ -19,6 +19,8 @@ public class ServicoDAO {
     PreparedStatement pstm;
     ResultSet rs;
     ArrayList<ServicoDTO> lista = new ArrayList<ServicoDTO>(); 
+    ArrayList<ServicoDTO> lista2 = new ArrayList<ServicoDTO>(); 
+
 
     public void addClienteDB(ServicoDTO servicoDTO){
         String sql = "insert into servico (cliente, nomeservico, valor, dataservico, devendo) values (?,?,?,?,?)";
@@ -90,4 +92,27 @@ public class ServicoDAO {
             JOptionPane.showMessageDialog(null, "ServicoDAO: " + erro);
         }
     }
+    /*public ArrayList<ServicoDTO> listarMes(){
+        String sql = "select * from servico";
+        conn = new ConexaoDAO().ConectaDB();
+        String dataString;
+        try {
+            pstm = conn.prepareStatement(sql);
+            rs = pstm.executeQuery();
+
+            while(rs.next()){
+                ServicoDTO servicoDTO = new ServicoDTO();
+                servicoDTO.setId(rs.getInt("id"));
+                servicoDTO.setCliente(rs.getString("cliente"));
+                servicoDTO.setNomeServico(rs.getString("nomeservico"));
+                servicoDTO.setValor(rs.getDouble("valor"));
+                servicoDTO.setDevendo(rs.getString("devendo"));
+                servicoDTO.setDataServico(rs.getDate("dataservico"));
+                lista2.add(servicoDTO);
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+    return lista2;
+    }*/
 }
