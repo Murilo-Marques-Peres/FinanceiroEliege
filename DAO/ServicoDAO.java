@@ -34,7 +34,7 @@ public class ServicoDAO {
             pstm.setString(5, servicoDTO.getDevendo());
             pstm.execute();
             pstm.close();
-            JOptionPane.showMessageDialog(null, "Cliente Adicionado!");
+            JOptionPane.showMessageDialog(null, "Cliente Adicionado Com Sucesso!");
             
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, "ServicoDAO:" + erro);
@@ -75,5 +75,19 @@ public class ServicoDAO {
             JOptionPane.showMessageDialog(null, "ServicoDAO:" + erro);
         }
         return lista;
+    }
+    public void removerServico(ServicoDTO servicoDTO){
+        String sql = "delete from servico where id = ?";
+        conn = new ConexaoDAO().ConectaDB();
+
+        try {
+            pstm = conn.prepareStatement(sql);
+            pstm.setInt(1, servicoDTO.getId());
+            pstm.execute();
+            pstm.close();
+            JOptionPane.showMessageDialog(null, "Cliente Removido Com Sucesso!");
+        } catch (SQLException erro) {
+            JOptionPane.showMessageDialog(null, "ServicoDAO: " + erro);
+        }
     }
 }

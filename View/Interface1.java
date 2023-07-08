@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -27,9 +28,8 @@ import DAO.ServicoDAO;
 import DTO.ServicoDTO;
 
 public class Interface1 implements ActionListener{
-    SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
-
-
+    
+    
     JFrame frame1 = new JFrame();
     JTable table1 = new JTable();
     String[] opcoesCaixaDevendo = {"Sim", "Não"};
@@ -46,26 +46,31 @@ public class Interface1 implements ActionListener{
     JLabel labelInserir = new JLabel("Inserir Cliente:");
     JLabel labelInserirDevendo = new JLabel("Devendo:  ");
     JLabel labelData = new JLabel("Data: ");
+    JLabel labelId = new JLabel("ID");
+    JTextArea areaTextoRemover = new JTextArea("Para Remover um Serviço \n   Insira o ID do Serviço");
     JTextField campoInserirCliente = new JTextField();
     JTextField campoInserirServico = new JTextField();
     JTextField campoInserirValor = new JTextField();
     JTextField campoDataDia = new JTextField();
     JTextField campoDataMes = new JTextField();
     JTextField campoDataAno = new JTextField();
+    JTextField campoRemoverId = new JTextField();
 
-    Date dataFormatada;
-
-
+    
+    
     DefaultTableModel model = new DefaultTableModel();
-    JButton botaoVer = new JButton("Visualizar");
+    JButton botaoVer = new JButton("Visualizar Serviços");
     JButton botaoEditar = new JButton("Editar/Add/Remover");
     JButton botaoAdicionar = new JButton("+");
     JButton botaoRemover = new JButton("-");
     JButton botaoEditar2 = new JButton("Editar");
     JButton botaoAdicionarCliente = new JButton("ADD");
+    JButton botaoRemoverId = new JButton("Remover");
 
     boolean confirmacaoRepeticao = false;
     int referenciaListaAnterior;
+    Date dataFormatada;
+    SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
 
     public String funcaoFormatarData(Date data){
         String dataString1 = data.toString();
@@ -194,7 +199,9 @@ public class Interface1 implements ActionListener{
         labelInserirDevendo.setHorizontalAlignment(JLabel.LEFT);
         labelData.setBounds(520, 480,100,30);
         labelData.setFont(new Font("Comic Sans", Font.BOLD, 18));
-        
+        labelId.setBounds(710,170,40,30);
+        areaTextoRemover.setBounds(800,150,300,60);
+        areaTextoRemover.setFont(new Font("Comic Sans", Font.BOLD, 18));
         
         campoInserirCliente.setFont(new Font("Comic Sans", Font.BOLD, 16));
         campoInserirServico.setFont(new Font("Comic Sans", Font.BOLD, 16));
@@ -205,6 +212,12 @@ public class Interface1 implements ActionListener{
         campoDataMes.setBounds(685, 480,30, 30);
         campoDataAno.setBounds(720,480,60,30);
         campoDataAno.setFont(new Font("Comic Sans", Font.BOLD, 16));
+        campoRemoverId.setFont(new Font("Comic Sans", Font.BOLD, 16));
+        campoRemoverId.setHorizontalAlignment(JTextField.CENTER);
+        campoRemoverId.setBounds(700,200,40,30);
+        botaoRemoverId.setBounds(620,270,200,40);
+        botaoRemoverId.setFont(new Font("Comic Sans", Font.BOLD, 18));
+        botaoRemoverId.addActionListener(this);
         botaoVer.setBounds(0,0,300,50);
         botaoVer.setFont(new Font("Comic Sans", Font.BOLD, 24));
         botaoVer.addActionListener(this);
@@ -220,7 +233,7 @@ public class Interface1 implements ActionListener{
         botaoAdicionarCliente.setBounds(600, 560, 200, 35);
         botaoAdicionarCliente.setFont(new Font("Comic Sans", Font.BOLD, 18));
         botaoAdicionarCliente.addActionListener(this);
-        
+
     }
     public void positionMethod(){
         frame1.add(painelGrid);
@@ -228,16 +241,20 @@ public class Interface1 implements ActionListener{
         frame1.add(painelfundo1);
         frame1.add(painelLabel);
         frame1.add(labelData);
+        frame1.add(labelId);
         frame1.add(scroll);
         frame1.add(campoDataDia);
         frame1.add(campoDataMes);
         frame1.add(campoDataAno);
+        frame1.add(campoRemoverId);
         frame1.add(labelMes);
         frame1.add(labelMes);
         frame1.add(botaoVer);
         frame1.add(botaoEditar);
         frame1.add(botaoAdicionarCliente);
+        frame1.add(botaoRemoverId);
         frame1.add(labelInserir);
+        frame1.add(areaTextoRemover);
         
     }
     public void setarDefaultFalse(){
@@ -253,6 +270,10 @@ public class Interface1 implements ActionListener{
         campoDataMes.setVisible(false);
         campoDataAno.setVisible(false);
         botaoAdicionarCliente.setVisible(false);
+        botaoRemoverId.setVisible(false);
+        campoRemoverId.setVisible(false);
+        labelId.setVisible(false);
+        areaTextoRemover.setVisible(false);
     }
 
     public Interface1(){
@@ -281,6 +302,9 @@ public class Interface1 implements ActionListener{
             campoDataMes.setVisible(false);
             campoDataAno.setVisible(false);
             botaoAdicionarCliente.setVisible(false);
+            campoRemoverId.setVisible(false);
+            labelId.setVisible(false);
+            areaTextoRemover.setVisible(false);
 
             scroll.setVisible(true);
             labelMes.setVisible(true);
@@ -301,10 +325,19 @@ public class Interface1 implements ActionListener{
             campoDataMes.setVisible(false);
             campoDataAno.setVisible(false);
             botaoAdicionarCliente.setVisible(false);
+            botaoRemoverId.setVisible(false);
+            campoRemoverId.setVisible(false);
+            labelId.setVisible(false);
+            areaTextoRemover.setVisible(false);
             
             painelGrid.setVisible(true);
         }
         if(e.getSource() == botaoAdicionar){
+            campoRemoverId.setVisible(false);
+            labelId.setVisible(false);
+            areaTextoRemover.setVisible(false);
+            botaoRemoverId.setVisible(false);
+
             painelGridEditar.setVisible(true);
             labelInserir.setVisible(true);
             painelLabel.setVisible(true);
@@ -347,6 +380,37 @@ public class Interface1 implements ActionListener{
             DAO.addClienteDB(servicoDTO);
             
 
+            campoRemoverId.setVisible(false);
+            labelId.setVisible(false);
+            areaTextoRemover.setVisible(false);
+            botaoRemoverId.setVisible(false);
+        }
+        if(e.getSource() == botaoRemover){
+
+            painelGridEditar.setVisible(false);
+            labelInserir.setVisible(false);
+            painelLabel.setVisible(false);
+            labelData.setVisible(false);
+            campoDataDia.setVisible(false);
+            campoDataMes.setVisible(false);
+            campoDataAno.setVisible(false);
+            botaoAdicionarCliente.setVisible(false);
+
+            campoRemoverId.setVisible(true);
+            labelId.setVisible(true);
+            areaTextoRemover.setVisible(true);
+            botaoRemoverId.setVisible(true);
+
+        }
+        if(e.getSource() == botaoRemoverId){
+            String idString = campoRemoverId.getText();
+            int idInt = Integer.valueOf(idString);
+
+            ServicoDTO servicoDTO = new ServicoDTO();
+            servicoDTO.setId(idInt);
+            
+            ServicoDAO dao = new ServicoDAO();
+            dao.removerServico(servicoDTO);
         }
     }
 }
