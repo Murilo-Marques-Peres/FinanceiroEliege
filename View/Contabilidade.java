@@ -4,11 +4,16 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -16,6 +21,11 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+
+import DAO.SaidaDAO;
+import DAO.ServicoDAO;
+import DTO.SaidaDTO;
+import DTO.ServicoDTO;
 
 public class Contabilidade implements ActionListener{
     JFrame frame1 = new JFrame();
@@ -28,6 +38,7 @@ public class Contabilidade implements ActionListener{
     JPanel painelInserirDados = new JPanel();
     JPanel painelLabel = new JPanel();
     JPanel painelTotal = new JPanel();
+    JPanel painelGridEditar = new JPanel();
     JLabel labelMarcaProduto = new JLabel("Marca do Produto:");
     JLabel labelValorProduto = new JLabel("Valor:                   R$");
     JLabel labelData = new JLabel("Data:");
@@ -38,11 +49,116 @@ public class Contabilidade implements ActionListener{
     JTextField campoDataDia = new JTextField();
     JTextField campoDataMes = new JTextField();
     JTextField campoDataAno = new JTextField();
+    ArrayList<SaidaDTO> lista;
     
     JButton botaoSomaTotal = new JButton("Somatório de Mês");
-    JButton botaoInserirDados = new JButton("Inserir Investimento");
+    JButton botaoEditar = new JButton("Add/Remover");
     JButton botaoVoltar = new JButton("Voltar");
     JButton botaoInserirInvestimento = new JButton("Inserir");
+    JButton botaoAdicionar = new JButton("+");
+    JButton botaoRemover = new JButton("-");
+
+    SaidaDAO saidaDAO = new SaidaDAO();
+
+    Date dataFormatada;
+
+    boolean confirmacaoRepeticao = false;
+    boolean confirmacaoRepeticao2 = false;
+    boolean primeiraVez = true;
+    int referenciaListaAnterior2;
+    int referenciaListaAnterior;
+    int numeroListaFiltrado = 0;
+
+
+    public void mudarMes(){
+        try {
+            if(lista.size()>0 && primeiraVez){
+                int numeroListaFiltrado = lista.size();
+                for(int x3=0;x3<numeroListaFiltrado;x3++){
+                    model.removeRow(0);
+                }
+                primeiraVez = false;
+            }
+            numeroListaFiltrado = 0;
+            SaidaDAO DAO = new SaidaDAO();
+            ArrayList<SaidaDTO> lista2 = DAO.selectTudoSaida();
+            if(confirmacaoRepeticao2){
+                for(int y=0; y<referenciaListaAnterior2;y++){
+                    model.removeRow(0);
+                }
+            }
+            for(int x=0; x<lista2.size(); x++){
+                String dataString = (funcaoFormatarData(lista2.get(x).getData())).toString();
+                String substringDataMes = dataString.substring(3,5);
+                int numeroCaixa = caixaMeses.getSelectedIndex() + 1;
+                String stringCaixa = String.valueOf(numeroCaixa);
+                if(substringDataMes.substring(0,1).equals("0")){
+                    substringDataMes = substringDataMes.substring(1, 2);
+                }
+                System.out.println("Substring = " + substringDataMes + " numeroCaixa = " + numeroCaixa);
+                if(substringDataMes.equals(stringCaixa)){
+                    numeroListaFiltrado++;
+                    model.addRow(new Object[]{
+                        lista2.get(x).getId(),
+                        lista2.get(x).getMarcaProduto(),
+                        lista2.get(x).getValor(),
+                        funcaoFormatarData(lista2.get(x).getData()),
+                    });
+                }
+                confirmacaoRepeticao2 = true;
+                referenciaListaAnterior2 = numeroListaFiltrado;
+                    
+                }
+
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(null,"Listar valores: " + erro);
+        }
+    }
+
+
+
+    public void setarLista(){
+        try {
+            SaidaDAO saidaDAO = new SaidaDAO();
+            lista = saidaDAO.selectTudoSaida();
+            if(confirmacaoRepeticao){
+                for(int y=0; y<referenciaListaAnterior;y++){
+                    model.removeRow(0);
+                }
+            }
+            for(int x=0; x<lista.size(); x++){
+                model.addRow(new Object[]{
+                    lista.get(x).getId(),
+                    lista.get(x).getMarcaProduto(),
+                    lista.get(x).getValor(),
+                    funcaoFormatarData(lista.get(x).getData()),
+                });
+            }
+            confirmacaoRepeticao = true;
+            referenciaListaAnterior = lista.size();
+
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(null,"Listar valores: " + erro);
+        }
+    }
+
+    public String funcaoFormatarData(Date data){
+        String dataString1 = data.toString();
+        String dataStringAno = dataString1.substring(0,4);
+        String dataStringMes = dataString1.substring(5,7);
+        String dataStringDia = dataString1.substring(8,10);
+
+        String dataReformatada = dataStringDia.concat("-").concat(dataStringMes).concat("-").concat(dataStringAno);
+
+        return dataReformatada;
+    } 
+    public void gridLayoutEditar(){
+        painelGridEditar.setLayout(new GridLayout(1,2));
+        painelGridEditar.add(botaoAdicionar);
+        painelGridEditar.add(botaoRemover);
+       // painelGrid.add(botaoEditar2);        
+
+    }
 
     public void tableMethod(){
         Object[] colunas = {"ID", "Marca do Produto", "Valor", "Data"};
@@ -97,9 +213,12 @@ public class Contabilidade implements ActionListener{
         painelInserirDados.setBounds(650, 350, 300, 80);
         painelLabel.setBounds(500,350,300,80);
         painelTotal.setBounds(320,320,400,35);
+        painelGridEditar.setBounds(650,150,300,80);
+
         scroll.setBounds(650,80,650,500);
 
         caixaMeses.setBounds(45,250,200,40);
+        caixaMeses.addActionListener(this);
 
         labelMarcaProduto.setFont(new Font("Comic Sans", Font.BOLD, 16));
         labelValorProduto.setFont(new Font("Comic Sans", Font.BOLD, 16));
@@ -124,18 +243,19 @@ public class Contabilidade implements ActionListener{
         botaoVoltar.setFont(new Font("Comic Sans", Font.BOLD, 24));
         botaoVoltar.setBounds(0,0, 300, 50);
         botaoVoltar.addActionListener(this);
-
         botaoInserirInvestimento.setFont(new Font("Comic Sans", Font.BOLD, 24));
         botaoInserirInvestimento.setBounds(500,600, 300, 50);
         botaoInserirInvestimento.addActionListener(this);
-
         botaoSomaTotal.setFont(new Font("Comic Sans", Font.BOLD, 24));
         botaoSomaTotal.setBounds(0,55, 300, 50);
         botaoSomaTotal.addActionListener(this);
-        
-        botaoInserirDados.setFont(new Font("Comic Sans", Font.BOLD, 24));
-        botaoInserirDados.setBounds(0,110, 300, 50);
-        botaoInserirDados.addActionListener(this);
+        botaoEditar.setFont(new Font("Comic Sans", Font.BOLD, 24));
+        botaoEditar.setBounds(0,110, 300, 50);
+        botaoEditar.addActionListener(this);
+        botaoAdicionar.setFont(new Font("Comic Sans", Font.BOLD, 35));
+        botaoAdicionar.addActionListener(this);
+        botaoRemover.setFont(new Font("Comic Sans", Font.BOLD, 50));
+        botaoRemover.addActionListener(this);
         
 
     }
@@ -145,6 +265,7 @@ public class Contabilidade implements ActionListener{
         frame1.add(painelInserirDados);
         frame1.add(painelLabel);
         frame1.add(painelTotal);
+        frame1.add(painelGridEditar);
         frame1.add(caixaMeses);
         frame1.add(labelData);
         frame1.add(campoDataDia);
@@ -152,7 +273,7 @@ public class Contabilidade implements ActionListener{
         frame1.add(campoDataAno);
         frame1.add(botaoVoltar);
         frame1.add(botaoSomaTotal);
-        frame1.add(botaoInserirDados);
+        frame1.add(botaoEditar);
         frame1.add(botaoInserirInvestimento);
     }
     public void setarDefaultFalse(){
@@ -165,6 +286,7 @@ public class Contabilidade implements ActionListener{
         campoDataAno.setVisible(false);
         scroll.setVisible(false);
         botaoInserirInvestimento.setVisible(false);
+        painelGridEditar.setVisible(false);
     }
 
     public Contabilidade(){
@@ -173,6 +295,7 @@ public class Contabilidade implements ActionListener{
         funcaoGridInserirCampos();
         funcaoInserirGridLabel();
         funcaoGridTotal();
+        gridLayoutEditar();
         tableMethod();
         componentsMethod();
         inserirComponentes();
@@ -186,7 +309,7 @@ public class Contabilidade implements ActionListener{
             TelaPrincipal telaPrincipal = new TelaPrincipal();
             frame1.dispose();
         }
-        if(e.getSource() == botaoInserirDados){
+        if(e.getSource() == botaoAdicionar){
             painelInserirDados.setVisible(true);
             painelLabel.setVisible(true);
             campoDataDia.setVisible(true);
@@ -194,11 +317,23 @@ public class Contabilidade implements ActionListener{
             campoDataAno.setVisible(true);
             labelData.setVisible(true);
             botaoInserirInvestimento.setVisible(true);
-
+            
+            
             painelTotal.setVisible(false);
             scroll.setVisible(false);
         }
+        if(e.getSource() == botaoEditar){
+            painelGridEditar.setVisible(true);
+            painelTotal.setVisible(false);
+            scroll.setVisible(false);
+            
+            
+        }
         if(e.getSource() == botaoSomaTotal){
+            setarLista();
+
+
+
             scroll.setVisible(true);
             painelTotal.setVisible(true);
 
@@ -209,6 +344,39 @@ public class Contabilidade implements ActionListener{
             campoDataMes.setVisible(false);
             campoDataAno.setVisible(false);
             botaoInserirInvestimento.setVisible(false);
+            painelGridEditar.setVisible(false);
+        }
+        if(e.getSource() == botaoInserirInvestimento){
+            String marcaString = campoInserirMarcaProduto.getText();
+            SaidaDAO saidaDAO = new SaidaDAO();
+            
+            String valorString = campoInserirValor.getText();
+            String dataDiaString = campoDataDia.getText();
+            String dataMesString = campoDataMes.getText();
+            String dataAnoString = campoDataAno.getText();
+
+            Double valorDouble = Double.valueOf(valorString);
+
+            String dataCompleta = dataAnoString.concat("-").concat(dataMesString).concat("-").
+            concat(dataDiaString);
+            System.out.println(dataCompleta);
+            SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+
+            try {
+                dataFormatada = formato.parse(dataCompleta);
+                
+            } catch (ParseException e1) {
+                e1.printStackTrace();
+            }
+            SaidaDTO saidaDTO = new SaidaDTO();
+            saidaDTO.setMarcaProduto(marcaString);
+            saidaDTO.setValor(valorDouble);
+            saidaDTO.setData(dataFormatada);
+
+            saidaDAO.addSaida(saidaDTO);
+        }
+        if(e.getSource() == caixaMeses){
+            mudarMes();
         }
     }
 }

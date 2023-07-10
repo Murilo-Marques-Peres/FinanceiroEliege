@@ -87,7 +87,7 @@ public class Interface1 implements ActionListener{
 
     public void mudarMes(){
         try {
-            if(lista.size()>1 && primeiraVez){
+            if(lista.size()>0 && primeiraVez){
                 int numeroListaFiltrado = lista.size();
                 for(int x3=0;x3<numeroListaFiltrado;x3++){
                     model.removeRow(0);

@@ -11,6 +11,7 @@ public class TelaPrincipal implements ActionListener{
     JFrame frame1 = new JFrame();
     JButton botaoEntrada = new JButton("Entrada");
     JButton botaoSaida = new JButton("Saída");
+    JButton botaoTotal = new JButton("Soma Total");
 
 
 
@@ -29,9 +30,13 @@ public class TelaPrincipal implements ActionListener{
         botaoSaida.setBounds(0,55,300,50);
         botaoSaida.setFont(new Font("Comic Sans", Font.BOLD, 24));
         botaoSaida.addActionListener(this);
+        botaoTotal.setFont(new Font("Comic Sans", Font.BOLD, 24));
+        botaoTotal.addActionListener(this);
+        botaoTotal.setBounds(0,110,300,50);
 
         frame1.add(botaoEntrada);
         frame1.add(botaoSaida);
+        frame1.add(botaoTotal);
 
         
 
@@ -47,5 +52,6 @@ public class TelaPrincipal implements ActionListener{
             Contabilidade contabilidade = new Contabilidade();
             frame1.dispose();
         }
+
     }
 }
