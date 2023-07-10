@@ -63,6 +63,7 @@ public class Interface1 implements ActionListener{
     
     
     DefaultTableModel model = new DefaultTableModel();
+    JButton botaoVoltar = new JButton("Voltar");
     JButton botaoVer = new JButton("Visualizar Serviços");
     JButton botaoEditar = new JButton("Editar/Add/Remover");
     JButton botaoAdicionar = new JButton("+");
@@ -70,8 +71,7 @@ public class Interface1 implements ActionListener{
     JButton botaoEditar2 = new JButton("Editar");
     JButton botaoAdicionarCliente = new JButton("ADD");
     JButton botaoRemoverId = new JButton("Remover");
-    JButton botaoFinanceiro = new JButton("Ver Contabilidade");
-
+    
     boolean confirmacaoRepeticao = false;
     boolean confirmacaoRepeticao2 = false;
     boolean primeiraVez = true;
@@ -276,13 +276,16 @@ public class Interface1 implements ActionListener{
         campoRemoverId.setFont(new Font("Comic Sans", Font.BOLD, 16));
         campoRemoverId.setHorizontalAlignment(JTextField.CENTER);
         campoRemoverId.setBounds(700,200,40,30);
+        botaoVoltar.setFont(new Font("Comic Sans", Font.BOLD, 24));
+        botaoVoltar.setBounds(0,0,300,50);
+        botaoVoltar.addActionListener(this);
         botaoRemoverId.setBounds(620,270,200,40);
         botaoRemoverId.setFont(new Font("Comic Sans", Font.BOLD, 18));
         botaoRemoverId.addActionListener(this);
-        botaoVer.setBounds(0,0,300,50);
+        botaoVer.setBounds(0,55,300,50);
         botaoVer.setFont(new Font("Comic Sans", Font.BOLD, 24));
         botaoVer.addActionListener(this);
-        botaoEditar.setBounds(0,55,300,50);
+        botaoEditar.setBounds(0, 110,300,50);
         botaoEditar.setFont(new Font("Comic Sans", Font.BOLD, 24));
         botaoEditar.addActionListener(this);
         botaoAdicionar.setFont(new Font("Comic Sans", Font.BOLD, 35));
@@ -294,9 +297,6 @@ public class Interface1 implements ActionListener{
         botaoAdicionarCliente.setBounds(600, 560, 200, 35);
         botaoAdicionarCliente.setFont(new Font("Comic Sans", Font.BOLD, 18));
         botaoAdicionarCliente.addActionListener(this);
-        botaoFinanceiro.setBounds(0,110,300,50);
-        botaoFinanceiro.setFont(new Font("Comic Sans", Font.BOLD, 24));
-        botaoFinanceiro.addActionListener(this);
         caixaMeses.setBounds(45,250,200,40);
         caixaMeses.addActionListener(this);
         labelFiltro.setFont(new Font("Comic Sans", Font.BOLD, 22));
@@ -317,6 +317,7 @@ public class Interface1 implements ActionListener{
         frame1.add(campoRemoverId);
         frame1.add(labelMes);
         frame1.add(labelMes);
+        frame1.add(botaoVoltar);
         frame1.add(botaoVer);
         frame1.add(botaoEditar);
         frame1.add(botaoAdicionarCliente);
@@ -325,7 +326,6 @@ public class Interface1 implements ActionListener{
         frame1.add(areaTextoRemover);
         frame1.add(caixaMeses);
         frame1.add(labelFiltro);
-        frame1.add(botaoFinanceiro);
     }
     public void setarDefaultFalse(){
         scroll.setVisible(false);
@@ -512,8 +512,10 @@ public class Interface1 implements ActionListener{
         if(e.getSource() == caixaMeses){
             mudarMes();
         }
-        if(e.getSource() == botaoFinanceiro){
+        if(e.getSource() == botaoVoltar){
+            TelaPrincipal telaPrincipal = new TelaPrincipal();
+            frame1.dispose();
+        }
         
-        }  
     }
 }
