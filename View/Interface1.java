@@ -50,8 +50,8 @@ public class Interface1 implements ActionListener{
     JLabel labelInserir = new JLabel("Inserir Cliente:");
     JLabel labelInserirDevendo = new JLabel("Devendo:  ");
     JLabel labelData = new JLabel("Data: ");
-    JLabel labelId = new JLabel("ID");
     JLabel labelFiltro = new JLabel("Filtro:");
+    JLabel labelId = new JLabel("ID");
     JTextArea areaTextoRemover = new JTextArea("Para Remover um Serviço \n   Insira o ID do Serviço");
     JTextField campoInserirCliente = new JTextField();
     JTextField campoInserirServico = new JTextField();
@@ -260,9 +260,12 @@ public class Interface1 implements ActionListener{
         labelInserirDevendo.setHorizontalAlignment(JLabel.LEFT);
         labelData.setBounds(520, 480,100,30);
         labelData.setFont(new Font("Comic Sans", Font.BOLD, 18));
-        labelId.setBounds(710,170,40,30);
         areaTextoRemover.setBounds(800,150,300,60);
         areaTextoRemover.setFont(new Font("Comic Sans", Font.BOLD, 18));
+        labelId.setFont(new Font("Comic Sans", Font.BOLD, 16));
+        labelId.setBounds(700,170,40,30);
+        labelId.setHorizontalAlignment(JLabel.CENTER);
+        
         
         campoInserirCliente.setFont(new Font("Comic Sans", Font.BOLD, 16));
         campoInserirServico.setFont(new Font("Comic Sans", Font.BOLD, 16));

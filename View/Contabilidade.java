@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -43,6 +44,8 @@ public class Contabilidade implements ActionListener{
     JLabel labelValorProduto = new JLabel("Valor:                   R$");
     JLabel labelData = new JLabel("Data:");
     JLabel labelTotal = new JLabel("Total do Mês: R$");
+    JLabel labelID = new JLabel("ID:");
+    JTextArea areaTextoRemover = new JTextArea("Para Remover uma Linha \n   Insira o ID do Serviço");
     //JTextField campoTotal = new JTextField();
     JTextField campoInserirMarcaProduto = new JTextField();
     JTextField campoInserirValor = new JTextField();
@@ -58,6 +61,7 @@ public class Contabilidade implements ActionListener{
     JButton botaoInserirInvestimento = new JButton("Inserir");
     JButton botaoAdicionar = new JButton("+");
     JButton botaoRemover = new JButton("-");
+    JButton botaoRemoverId = new JButton("Remover");
 
     SaidaDAO saidaDAO = new SaidaDAO();
 
@@ -227,7 +231,12 @@ public class Contabilidade implements ActionListener{
         labelData.setBounds(500,440,100,30);
         labelTotal.setFont(new Font("Comic Sans", Font.BOLD, 16));
         labelTotal.setHorizontalAlignment(JLabel.RIGHT);
-
+        labelID.setBounds(700,310,40,30);
+        labelID.setHorizontalAlignment(JLabel.CENTER);
+        labelID.setFont(new Font("Comic Sans", Font.BOLD, 16));
+        
+        areaTextoRemover.setBounds(800,500,300,60);
+        areaTextoRemover.setFont(new Font("Comic Sans", Font.BOLD, 16));
 
         //campoTotal.setEditable(false);
         //campoTotal.setFont(new Font("Comic Sans", Font.BOLD, 16));
@@ -260,6 +269,9 @@ public class Contabilidade implements ActionListener{
         botaoAdicionar.addActionListener(this);
         botaoRemover.setFont(new Font("Comic Sans", Font.BOLD, 50));
         botaoRemover.addActionListener(this);
+        botaoRemoverId.setFont(new Font("Comic Sans", Font.BOLD, 24));
+        botaoRemoverId.addActionListener(this);
+        botaoRemoverId.setBounds(850,350,150,50);
         
 
     }
@@ -272,6 +284,8 @@ public class Contabilidade implements ActionListener{
         frame1.add(painelGridEditar);
         frame1.add(caixaMeses);
         frame1.add(labelData);
+        frame1.add(labelID);
+        frame1.add(areaTextoRemover);
         frame1.add(campoDataDia);
         frame1.add(campoDataMes);
         frame1.add(campoDataAno);
@@ -280,6 +294,7 @@ public class Contabilidade implements ActionListener{
         frame1.add(botaoSomaTotal);
         frame1.add(botaoEditar);
         frame1.add(botaoInserirInvestimento);
+        frame1.add(botaoRemoverId);
     }
     public void setarDefaultFalse(){
         painelInserirDados.setVisible(false);
@@ -293,7 +308,9 @@ public class Contabilidade implements ActionListener{
         scroll.setVisible(false);
         botaoInserirInvestimento.setVisible(false);
         painelGridEditar.setVisible(false);
-
+        areaTextoRemover.setVisible(false);
+        labelID.setVisible(false);
+        botaoRemoverId.setVisible(false);
     }
 
     public Contabilidade(){
@@ -328,12 +345,18 @@ public class Contabilidade implements ActionListener{
             campoRemoverId.setVisible(false);
             //painelTotal.setVisible(false);
             scroll.setVisible(false);
+            areaTextoRemover.setVisible(false);
+            labelID.setVisible(false);
+            botaoRemoverId.setVisible(false);
         }
         if(e.getSource() == botaoEditar){
             painelGridEditar.setVisible(true);
             //painelTotal.setVisible(false);
             scroll.setVisible(false);
             campoRemoverId.setVisible(false);
+            areaTextoRemover.setVisible(false);
+            labelID.setVisible(false);
+            botaoRemoverId.setVisible(false);
 
         }
         if(e.getSource() == botaoSomaTotal){
@@ -352,6 +375,10 @@ public class Contabilidade implements ActionListener{
             campoDataAno.setVisible(false);
             botaoInserirInvestimento.setVisible(false);
             painelGridEditar.setVisible(false);
+            areaTextoRemover.setVisible(false);
+            labelID.setVisible(false);
+            campoRemoverId.setVisible(false);
+            botaoRemoverId.setVisible(false);
         }
         if(e.getSource() == botaoInserirInvestimento){
             String marcaString = campoInserirMarcaProduto.getText();
@@ -381,6 +408,8 @@ public class Contabilidade implements ActionListener{
             saidaDTO.setData(dataFormatada);
 
             saidaDAO.addSaida(saidaDTO);
+
+            
         }
         if(e.getSource() == caixaMeses){
             mudarMes();
@@ -388,6 +417,26 @@ public class Contabilidade implements ActionListener{
         }
         if(e.getSource() == botaoRemover){
             campoRemoverId.setVisible(true);
+            areaTextoRemover.setVisible(true);
+            labelID.setVisible(true);
+            botaoRemoverId.setVisible(true);
+
+            labelData.setVisible(false);
+            campoDataAno.setVisible(false);
+            campoDataMes.setVisible(false);
+            campoDataDia.setVisible(false);
+            painelInserirDados.setVisible(false);
+            painelLabel.setVisible(false);
+            botaoInserirInvestimento.setVisible(false);
+        }
+        if(e.getSource() == botaoRemoverId){
+            SaidaDAO saidaDAO = new SaidaDAO();
+            SaidaDTO saidaDTO = new SaidaDTO();
+            String idString = campoRemoverId.getText();
+            int idInt = Integer.valueOf(idString);
+
+            saidaDTO.setId(idInt);
+            saidaDAO.deleteSaida(saidaDTO);
         }
     }
 }
