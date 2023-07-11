@@ -52,6 +52,10 @@ public class TelaPrincipal implements ActionListener{
             Contabilidade contabilidade = new Contabilidade();
             frame1.dispose();
         }
+        if(e.getSource() == botaoTotal){
+            ContasTotais contasTotais = new ContasTotais();
+            frame1.dispose();
+        }
 
     }
 }
