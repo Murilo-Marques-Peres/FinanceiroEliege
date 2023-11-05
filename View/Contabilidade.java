@@ -69,6 +69,7 @@ public class Contabilidade implements ActionListener{
 
     boolean confirmacaoRepeticao = false;
     boolean confirmacaoRepeticao2 = false;
+    boolean confirmacaoBotaoSoma = false;
     boolean primeiraVez = true;
     int referenciaListaAnterior2;
     int referenciaListaAnterior;
@@ -106,7 +107,8 @@ public class Contabilidade implements ActionListener{
                     model.addRow(new Object[]{
                         lista2.get(x).getId(),
                         lista2.get(x).getMarcaProduto(),
-                        lista2.get(x).getValor(),
+                        //lista2.get(x).getValor(),
+                        (String.format("R$%.2f", lista2.get(x).getValor()).replace(".",",")),
                         funcaoFormatarData(lista2.get(x).getData()),
                     });
                 }
@@ -135,7 +137,7 @@ public class Contabilidade implements ActionListener{
                 model.addRow(new Object[]{
                     lista.get(x).getId(),
                     lista.get(x).getMarcaProduto(),
-                    lista.get(x).getValor(),
+                    (String.format("R$%.2f", lista.get(x).getValor()).replace(".",",")),
                     funcaoFormatarData(lista.get(x).getData()),
                 });
             }
@@ -311,6 +313,7 @@ public class Contabilidade implements ActionListener{
         areaTextoRemover.setVisible(false);
         labelID.setVisible(false);
         botaoRemoverId.setVisible(false);
+        caixaMeses.setVisible(false);
     }
 
     public Contabilidade(){
@@ -360,31 +363,38 @@ public class Contabilidade implements ActionListener{
 
         }
         if(e.getSource() == botaoSomaTotal){
-            setarLista();
+            if(!confirmacaoBotaoSoma){
+                caixaMeses.setVisible(true);
+                setarLista();
+                scroll.setVisible(true);
+                confirmacaoBotaoSoma = true;
+            }if(confirmacaoBotaoSoma){
+                //ainelTotal.setVisible(true);
+    
+                painelInserirDados.setVisible(false);
+                painelLabel.setVisible(false);
+                labelData.setVisible(false);
+                campoDataDia.setVisible(false);
+                campoDataMes.setVisible(false);
+                campoDataAno.setVisible(false);
+                botaoInserirInvestimento.setVisible(false);
+                painelGridEditar.setVisible(false);
+                areaTextoRemover.setVisible(false);
+                labelID.setVisible(false);
+                campoRemoverId.setVisible(false);
+                botaoRemoverId.setVisible(false);
 
+                scroll.setVisible(true);
+                confirmacaoBotaoSoma = true;
+                caixaMeses.setVisible(true);
 
-
-            scroll.setVisible(true);
-            //ainelTotal.setVisible(true);
-
-            painelInserirDados.setVisible(false);
-            painelLabel.setVisible(false);
-            labelData.setVisible(false);
-            campoDataDia.setVisible(false);
-            campoDataMes.setVisible(false);
-            campoDataAno.setVisible(false);
-            botaoInserirInvestimento.setVisible(false);
-            painelGridEditar.setVisible(false);
-            areaTextoRemover.setVisible(false);
-            labelID.setVisible(false);
-            campoRemoverId.setVisible(false);
-            botaoRemoverId.setVisible(false);
+            }
         }
         if(e.getSource() == botaoInserirInvestimento){
             String marcaString = campoInserirMarcaProduto.getText();
             SaidaDAO saidaDAO = new SaidaDAO();
             
-            String valorString = campoInserirValor.getText();
+            String valorString = (campoInserirValor.getText().toString()).replace(",",".");
             String dataDiaString = campoDataDia.getText();
             String dataMesString = campoDataMes.getText();
             String dataAnoString = campoDataAno.getText();

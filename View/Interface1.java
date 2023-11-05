@@ -117,11 +117,8 @@ public class Interface1 implements ActionListener{
                         lista2.get(x).getId(),
                         lista2.get(x).getCliente(),
                         lista2.get(x).getNomeServico(),
-                        lista2.get(x).getValor(),
-    
+                        (String.format("R$%.2f", lista.get(x).getValor()).replace(".",",")),
                         funcaoFormatarData(lista2.get(x).getDataServico()),
-                        
-    
                         lista2.get(x).getDevendo(),
                         
                     });
@@ -160,8 +157,7 @@ public class Interface1 implements ActionListener{
                     lista.get(x).getId(),
                     lista.get(x).getCliente(),
                     lista.get(x).getNomeServico(),
-                    lista.get(x).getValor(),
-
+                    (String.format("R$%.2f", lista.get(x).getValor())).replace(".",","),
                     funcaoFormatarData(lista.get(x).getDataServico()),
                     
 
@@ -451,7 +447,7 @@ public class Interface1 implements ActionListener{
         if(e.getSource() == botaoAdicionarCliente){
             String cliente1 = campoInserirCliente.getText();
             String servico1 = campoInserirServico.getText();
-            String valor1 = campoInserirValor.getText();
+            String valor1 = (campoInserirValor.getText().toString()).replace(",",".");
             String devendo = caixaDevendo.getSelectedItem().toString();
 
             Double valorDouble = Double.valueOf(valor1);

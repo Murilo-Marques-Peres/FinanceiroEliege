@@ -28,7 +28,7 @@ public class SaidaDAO {
             pstm.setDate(3, sqlDate);
             pstm.execute();
             pstm.close();
-            JOptionPane.showMessageDialog(null, "Transação Inserida Com Sucesso");
+            JOptionPane.showMessageDialog(null, "Transação Concluída Com Sucesso");
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(null, "SaidaDAO: " + erro);
         }
