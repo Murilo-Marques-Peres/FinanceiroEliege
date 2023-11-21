@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -84,7 +85,105 @@ public class Interface1 implements ActionListener{
     SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
 
 
+    public ArrayList<ServicoDTO> organizarLista(ArrayList<ServicoDTO> lista, int tamanho){
+        ArrayList<ServicoDTO> listaNova= new ArrayList<>();
+        Iterator itr = lista.iterator();
+        int menor = 15;
+        for(int x2=0; x2<tamanho; x2++){
+            menor = 15;
+            itr = lista.iterator();
+            while(itr.hasNext()){
+                ServicoDTO servico = (ServicoDTO)itr.next();
+                String strData = String.valueOf(servico.getDataServico());
+                String subSData = strData.substring(5,7);
+                if(subSData.substring(0, 1).equals("0")){
+                    subSData = subSData.substring(1);
+                }
+                int dataInt = Integer.parseInt(subSData);
+                if(dataInt < menor){
+                    menor = dataInt;
+                }
+            }
 
+            String strMenor = String.valueOf(menor);
+            Iterator itr2 = lista.iterator();
+            
+            while(itr2.hasNext()){
+                ServicoDTO servico2 = (ServicoDTO)itr2.next();
+                String strData2 = String.valueOf(servico2.getDataServico());
+                String subData2 = strData2.substring(5,7);
+                if(subData2.substring(0, 1).equals("0")){
+                    subData2 = subData2.substring(1);
+                }
+                if(subData2.equals(strMenor)){
+                    itr2.remove();
+                    listaNova.add(servico2);
+                }
+            }
+
+        }
+        //listaNova = organizarDia(listaNova);
+        return listaNova;
+    }
+    public ArrayList<ServicoDTO> organizarDia(ArrayList<ServicoDTO> lista){
+        ArrayList<ServicoDTO> listaEspecifica = new ArrayList<>();
+        ArrayList<ServicoDTO> listaNova = new ArrayList<>();
+        String menor = "";
+        int menorInt = 1;
+        int tamanhoLista = lista.size() + 1;
+        Iterator itr = lista.iterator();
+        ServicoDTO servico = (ServicoDTO)itr.next();
+        ServicoDTO servico3;
+        Iterator itr2;
+        String strData = "";
+        String strMes="";
+        int contador = 0;
+        int menor2 = 0;
+
+        while(itr.hasNext()){
+            for(int x = 1; x<tamanhoLista; x++){
+                strData = String.valueOf(servico.getDataServico());
+                strMes = strData.substring(5,7);
+                if(strMes.substring(0).equals("0")){
+                    strMes = strMes.substring(1);
+                }
+                int mesInt = Integer.parseInt(strMes);
+                if(mesInt == menorInt){
+                    listaEspecifica.add(servico);
+                    contador += 1;
+                }
+            }
+            for(int x3 = 0; x3<contador; x3++){
+                itr.remove();
+            }
+            itr2 = listaEspecifica.iterator();
+            servico3 = (ServicoDTO)itr2.next();
+            
+            for(int x4=0; x4 < listaEspecifica.size(); x4++){
+                
+                String strdDiaEspecifico = String.valueOf(listaEspecifica.get(x4).getDataServico());
+                String subDiaEspecifico = strdDiaEspecifico.substring(8);
+                if(subDiaEspecifico.substring(0).equals("0")){
+                subDiaEspecifico = subDiaEspecifico.substring(1);
+                }
+                int dia1Int = Integer.parseInt(subDiaEspecifico);
+
+                String strdDiaEspecifico2 = String.valueOf(listaEspecifica.get(x4 + 1).getDataServico());
+                String subDiaEspecifico2 = strdDiaEspecifico.substring(8);
+                if(subDiaEspecifico2.substring(0).equals("0")){
+                subDiaEspecifico2 = subDiaEspecifico2.substring(1);
+                }
+                int dia2Int = Integer.parseInt(subDiaEspecifico2);
+                for(int x5 = 0; x5 < lista.size() - 1; x5++){
+                    if(dia1Int < dia2Int){
+                        menor2 = x4;
+                    }
+                }
+            }
+            listaNova.add()
+            contador = 0;
+        }
+    }
     public void mudarMes(){
         try {
             if(lista.size()>0 && primeiraVez){
@@ -97,6 +196,7 @@ public class Interface1 implements ActionListener{
             numeroListaFiltrado = 0;
             ServicoDAO DAO = new ServicoDAO();
             ArrayList<ServicoDTO> lista2 = DAO.pesquisarClientes();
+            lista2 = organizarLista(lista2, lista2.size());
             if(confirmacaoRepeticao2){
                 for(int y=0; y<referenciaListaAnterior2;y++){
                     model.removeRow(0);
@@ -147,6 +247,7 @@ public class Interface1 implements ActionListener{
         try {
             ServicoDAO DAO = new ServicoDAO();
             lista = DAO.pesquisarClientes();
+            lista = organizarLista(lista, lista.size());
             if(confirmacaoRepeticao){
                 for(int y=0; y<referenciaListaAnterior;y++){
                     model.removeRow(0);
