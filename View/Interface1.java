@@ -317,7 +317,7 @@ public class Interface1 implements ActionListener{
             numeroListaFiltrado = 0;
             ServicoDAO DAO = new ServicoDAO();
             ArrayList<ServicoDTO> lista2 = DAO.pesquisarClientes();
-            lista2 = organizarLista(lista2, lista2.size());
+            //lista2 = organizarLista(lista2, lista2.size());
             if(confirmacaoRepeticao2){
                 for(int y=0; y<referenciaListaAnterior2;y++){
                     model.removeRow(0);
@@ -368,7 +368,7 @@ public class Interface1 implements ActionListener{
         try {
             ServicoDAO DAO = new ServicoDAO();
             lista = DAO.pesquisarClientes();
-            lista = organizarLista(lista, lista.size());
+            //lista = organizarLista(lista, lista.size());
             if(confirmacaoRepeticao){
                 for(int y=0; y<referenciaListaAnterior;y++){
                     model.removeRow(0);

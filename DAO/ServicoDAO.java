@@ -43,7 +43,7 @@ public class ServicoDAO {
         }
     }   
     public ArrayList<ServicoDTO> pesquisarClientes(){
-        String sql = "select * from servico";
+        String sql = "select * from servico order by dataservico";
         conn = new ConexaoDAO().ConectaDB();
         try {
             pstm = conn.prepareStatement(sql);
